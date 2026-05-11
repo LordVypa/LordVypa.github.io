@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Technical Animator – Intern · FreakGang Interactive</title>
+  <meta name="description" content="FreakGang Interactive is looking for a Technical Animator intern to help build a first-person horror game in Unreal Engine 5." />
+  <meta property="og:title" content="Technical Animator – Intern · FreakGang Interactive" />
+  <meta property="og:description" content="Remote · Contract · Up to 3 months. Join us building a narrative horror game in UE5." />
+  <meta property="og:type" content="website" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0d0d0d; --surface: #141414; --border: #242424;
+      --accent: #c8ff00; --accent-dim: #9bbf00;
+      --text: #e8e8e8; --muted: #888;
+    }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, sans-serif; line-height: 1.7; min-height: 100vh; }
+    header { border-bottom: 1px solid var(--border); padding: 20px 0; }
+    .header-inner { max-width: 720px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; gap: 12px; }
+    .logo-mark { width: 32px; height: 32px; background: var(--accent); border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .brand { font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+    main { max-width: 720px; margin: 0 auto; padding: 56px 24px 80px; }
+    .job-header { margin-bottom: 48px; }
+    .job-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); background: rgba(200,255,0,0.08); border: 1px solid rgba(200,255,0,0.2); border-radius: 4px; padding: 4px 10px; margin-bottom: 20px; }
+    .job-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulse 2s ease-in-out infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    h1 { font-size: clamp(28px, 5vw, 40px); font-weight: 700; line-height: 1.15; letter-spacing: -0.02em; margin-bottom: 16px; }
+    .meta-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+    .pill { font-size: 12px; padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border); color: var(--muted); background: var(--surface); }
+    .note { margin-top: 20px; font-size: 13px; color: var(--muted); font-style: italic; border-left: 2px solid var(--border); padding-left: 14px; }
+    hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+    section { margin-bottom: 44px; }
+    h2 { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+    p { margin-bottom: 14px; color: var(--text); font-size: 15px; }
+    p:last-child { margin-bottom: 0; }
+    strong { color: #fff; font-weight: 600; }
+    em { color: var(--muted); font-style: italic; }
+    ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    ul li { font-size: 15px; padding-left: 20px; position: relative; color: var(--text); }
+    ul li::before { content: '→'; position: absolute; left: 0; color: var(--accent); font-size: 13px; top: 1px; }
+    .steps { display: flex; flex-direction: column; gap: 0; }
+    .step { display: grid; grid-template-columns: 40px 1fr; gap: 16px; padding: 20px 0; border-bottom: 1px solid var(--border); }
+    .step:last-child { border-bottom: none; }
+    .step-num { font-size: 11px; font-weight: 700; color: var(--accent); letter-spacing: 0.06em; padding-top: 2px; }
+    .step-body h3 { font-size: 15px; font-weight: 600; color: #fff; margin-bottom: 6px; }
+    .step-body p { font-size: 14px; color: var(--muted); margin: 0; }
+    .callout { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 6px; padding: 18px 20px; font-size: 14px; color: var(--text); }
+    .cta-block { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 32px; text-align: center; }
+    .cta-block p { font-size: 14px; color: var(--muted); margin-bottom: 20px; }
+    .cta-btn { display: inline-block; background: var(--accent); color: #000; font-size: 14px; font-weight: 700; letter-spacing: 0.04em; padding: 12px 28px; border-radius: 6px; text-decoration: none; transition: background 0.15s; }
+    .cta-btn:hover { background: var(--accent-dim); }
+    footer { border-top: 1px solid var(--border); padding: 24px; text-align: center; font-size: 12px; color: var(--muted); }
+  </style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <div class="logo-mark">
+      <svg viewBox="0 0 18 18" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9 2L16 6V12L9 16L2 12V6L9 2Z" fill="#000"/>
+        <circle cx="9" cy="10" r="2" fill="#0d0d0d"/>
+      </svg>
+    </div>
+    <span class="brand">FreakGang Interactive</span>
+  </div>
+</header>
+<main>
+  <div class="job-header">
+    <div class="job-badge">Now Hiring</div>
+    <h1>Technical Animator<br>— Intern</h1>
+    <div class="meta-pills">
+      <span class="pill">📍 Fully Remote</span>
+      <span class="pill">⏱ Contract · Up to 3 months</span>
+      <span class="pill">🎮 Unreal Engine 5</span>
+      <span class="pill">🖥 PC / Console</span>
+    </div>
+    <p class="note">This may turn into a longer engagement based on how much we end up liking each other — any extension would be subject to revised terms.</p>
+  </div>
+  <hr>
+  <section>
+    <h2>Who We Are</h2>
+    <p><strong>FreakGang Interactive</strong> is a team of six developers — a mix of veterans and newcomers — working remotely from all over India on our first game together. <strong>We move fast, stay curious, and leave our assumptions at the door.</strong></p>
+    <p><em>We believe great games are built by people willing to explore, experiment, and figure things out together.</em></p>
+  </section>
+  <section>
+    <h2>The Project</h2>
+    <p>A first-person horror game for <strong>PC &amp; Consoles</strong> in <strong>Unreal Engine 5</strong>, currently titled <strong><em>WITH</em></strong> (working title). Narrative-driven atmospheric experience with a strong focus on character performance-based storytelling.</p>
+  </section>
+  <section>
+    <h2>What You'll Do</h2>
+    <ul>
+      <li><strong>Learn &amp; use</strong> our custom animation pipeline built on <strong>Reallusion tools</strong> — Character Creator, iClone &amp; ActorCore</li>
+      <li><strong>Animate, stage &amp; capture</strong> character sequences based on provided scripts and feedback</li>
+      <li><strong>Help integrate clips</strong> into game scenes in UE5, supported by our dev team</li>
+      <li>Pick up <strong>real gamedev skills</strong> along the way — we’ll make this journey a fun one</li>
+    </ul>
+  </section>
+  <section>
+    <h2>Who We're Looking For</h2>
+    <p>Students or early-career animators <strong>genuinely into video games</strong> — especially horror, narrative, or cinematic experiences.</p>
+    <ul>
+      <li>Pursuing animation, game dev, or a related field</li>
+      <li>Basic UE5 familiarity; iClone or CC4 exposure is a plus</li>
+      <li>Genuinely enjoys video games</li>
+    </ul>
+    <br>
+    <div class="callout">We’ll guide you through the creative and technical process. In return, <strong>we want you to walk away with real hands-on experience building game content from the ground up</strong> — <em>and some $$ of course.</em></div>
+  </section>
+  <section>
+    <h2>The Process</h2>
+    <div class="steps">
+      <div class="step"><div class="step-num">01</div><div class="step-body"><h3>Apply</h3><p>Portfolio or showreel — game clips, personal projects, coursework all welcome.</p></div></div>
+      <div class="step"><div class="step-num">02</div><div class="step-body"><h3>Intro Call</h3><p>We’ll review your submission and if it clicks, <strong>hop on a brief call</strong> to say hi.</p></div></div>
+      <div class="step"><div class="step-num">03</div><div class="step-body"><h3>Trial Week</h3><p><strong>Spend a week working with us.</strong> If something doesn’t click, we’ll extend a <em>small compensation</em> for your time.</p></div></div>
+      <div class="step"><div class="step-num">04</div><div class="step-body"><h3>Start</h3><p>Sign the contract, drop into our <strong>Discord</strong>, and we get the ball rolling.</p></div></div>
+    </div>
+  </section>
+  <section>
+    <h2>Compensation</h2>
+    <p>We don’t have very deep pockets (yet), but we’ll do our <strong>best to compensate all contributors fairly</strong>. Let’s chat and see if we can land on something that works for you.</p>
+  </section>
+  <div class="cta-block">
+    <p>Send us your portfolio, showreel, or anything that shows your work.</p>
+    <a class="cta-btn" href="mailto:freakganginteractive@gmail.com">Apply → freakganginteractive@gmail.com</a>
+  </div>
+</main>
+<footer>© 2026 FreakGang Interactive · All rights reserved</footer>
+</body>
+</html>
