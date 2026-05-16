@@ -615,7 +615,7 @@
 </head>
 <body>
 <canvas id="dust-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:5"></canvas>
-<canvas id="fog-canvas"  style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:4"></canvas>
+<canvas id="fog-canvas"  style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:4;image-rendering:auto"></canvas>
 
 <!-- ═══ NAV ══════════════════════════════════════════════ -->
 <nav>
@@ -835,6 +835,9 @@
   <!-- ── FOG TAB ── -->
   <div class="dev-pane" id="tab-fog">
     <label class="dev-check"><span>Enable</span><input type="checkbox" id="fog-on" checked></label>
+    <label class="dev-check"><span>30fps throttle</span><input type="checkbox" id="fog-throttle"></label>
+    <div class="dev-row"><span>Octaves</span><span id="fog-oct-val">3</span></div>
+    <input class="dev-slider" type="range" id="fog-oct" min="1" max="5" step="1" value="3">
     <div class="dev-row"><span>Opacity</span><span id="fog-opacity-val">0.55</span></div>
     <input class="dev-slider" type="range" id="fog-opacity" min="0" max="1" step="0.05" value="0.55">
     <div class="dev-row"><span>Height</span><span id="fog-height-val">0.40</span></div>
@@ -885,7 +888,7 @@ document.querySelectorAll('.dev-tab').forEach(tab => {
           || canvas.getContext('experimental-webgl', {premultipliedAlpha:false, alpha:true});
   if(!gl){ console.warn('WebGL not supported'); return; }
 
-  window.FOG = { enabled:true, opacity:0.55, height:0.40, speed:1.0, color:'#1a0f04', scale:3.2, warp:1.8, flowX:1.0, flowY:0.0 };
+  window.FOG = { enabled:true, opacity:0.55, height:0.40, speed:1.0, color:'#1a0f04', scale:3.2, warp:1.8, flowX:1.0, flowY:0.0, octaves:3, throttle:true };
 
   const VS = `
 attribute vec2 a_pos;
@@ -904,6 +907,7 @@ uniform float u_scale;
 uniform float u_warp;
 uniform float u_flowX;
 uniform float u_flowY;
+uniform float u_oct;
 
 vec2 hash2(vec2 p){
   p = vec2(dot(p,vec2(127.1,311.7)),dot(p,vec2(269.5,183.3)));
@@ -917,7 +921,12 @@ float noise(vec2 p){
 float fbm(vec2 p){
   float v=0.0,a=0.5;
   mat2 m=mat2(0.80,-0.60,0.60,0.80);
-  for(int i=0;i<5;i++){v+=a*noise(p);p=m*p*2.1+vec2(31.4,17.9);a*=0.5;}
+  /* unrolled — GLSL ES 1.0 needs constant loop bounds */
+                     v+=a*noise(p);p=m*p*2.1+vec2(31.4,17.9);a*=0.5;
+  if(u_oct>1.5){v+=a*noise(p);p=m*p*2.1+vec2(31.4,17.9);a*=0.5;}
+  if(u_oct>2.5){v+=a*noise(p);p=m*p*2.1+vec2(31.4,17.9);a*=0.5;}
+  if(u_oct>3.5){v+=a*noise(p);p=m*p*2.1+vec2(31.4,17.9);a*=0.5;}
+  if(u_oct>4.5){v+=a*noise(p);}
   return v;
 }
 void main(){
@@ -966,7 +975,8 @@ void main(){
         uSpd  =gl.getUniformLocation(prog,'u_speed'),  uSc   =gl.getUniformLocation(prog,'u_scroll'),
         uCol  =gl.getUniformLocation(prog,'u_color'),
         uScale=gl.getUniformLocation(prog,'u_scale'),  uWarp =gl.getUniformLocation(prog,'u_warp'),
-        uFlowX=gl.getUniformLocation(prog,'u_flowX'),  uFlowY=gl.getUniformLocation(prog,'u_flowY');
+        uFlowX=gl.getUniformLocation(prog,'u_flowX'),  uFlowY=gl.getUniformLocation(prog,'u_flowY'),
+        uOct  =gl.getUniformLocation(prog,'u_oct');
 
   function hexToRgb(hex){
     const r=parseInt(hex.slice(1,3),16)/255;
@@ -979,7 +989,7 @@ void main(){
   gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA); // premultiplied
 
   let W=0, H=0;
-  function resize(){ W=canvas.width=window.innerWidth; H=canvas.height=window.innerHeight; gl.viewport(0,0,W,H); }
+  function resize(){ W=canvas.width=Math.ceil(window.innerWidth*0.5); H=canvas.height=Math.ceil(window.innerHeight*0.5); gl.viewport(0,0,W,H); }
   window.addEventListener('resize', resize); resize();
 
   let scroll=0, tScroll=0;
@@ -988,7 +998,14 @@ void main(){
     tScroll = max>0 ? window.scrollY/max : 0;
   });
 
+  let lastT=0;
   function render(t){
+    requestAnimationFrame(render);
+    // throttle: skip frame if not enough time elapsed
+    const fps = window.FOG.throttle ? 30 : 60;
+    if(t - lastT < 1000/fps - 1) return;
+    lastT = t;
+
     scroll += (tScroll-scroll)*0.04;
     gl.clearColor(0,0,0,0); gl.clear(gl.COLOR_BUFFER_BIT);
     if(window.FOG.enabled){
@@ -1000,13 +1017,13 @@ void main(){
       gl.uniform1f(uSc,  scroll);
       const [r,g,b] = hexToRgb(window.FOG.color || '#1a0f04');
       gl.uniform3f(uCol,  r, g, b);
-      gl.uniform1f(uScale, window.FOG.scale  ?? 3.2);
-      gl.uniform1f(uWarp,  window.FOG.warp   ?? 1.8);
-      gl.uniform1f(uFlowX, window.FOG.flowX  ?? 1.0);
-      gl.uniform1f(uFlowY, window.FOG.flowY  ?? 0.0);
+      gl.uniform1f(uScale, window.FOG.scale   ?? 3.2);
+      gl.uniform1f(uWarp,  window.FOG.warp    ?? 1.8);
+      gl.uniform1f(uFlowX, window.FOG.flowX   ?? 1.0);
+      gl.uniform1f(uFlowY, window.FOG.flowY   ?? 0.0);
+      gl.uniform1f(uOct,   window.FOG.octaves ?? 3);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     }
-    requestAnimationFrame(render);
   }
   requestAnimationFrame(render);
 })();
@@ -1126,7 +1143,7 @@ void main(){
 
 <script>
 (function(){
-  const DEFAULTS = { amp:2.5, spd:0.8, glow:0.90, glowInv:true, breatheOn:true, breatheSpeed:4.0, breatheDepth:0.5, wordDisabled:[false,false,false,false], dustOn:true, dustCount:100, dustSpeed:1.0, dustOpacity:1.0, dustSize:1.0, dustParallax:1.0, fogOn:true, fogOpacity:0.55, fogHeight:0.40, fogSpeed:1.0, fogColor:'#1a0f04', fogScale:3.2, fogWarp:1.8, fogFlowX:1.0, fogFlowY:0.0 };
+  const DEFAULTS = { amp:2.5, spd:0.8, glow:0.90, glowInv:true, breatheOn:true, breatheSpeed:4.0, breatheDepth:0.5, wordDisabled:[false,false,false,false], dustOn:true, dustCount:100, dustSpeed:1.0, dustOpacity:1.0, dustSize:1.0, dustParallax:1.0, fogOn:true, fogOpacity:0.55, fogHeight:0.40, fogSpeed:1.0, fogColor:'#1a0f04', fogScale:3.2, fogWarp:1.8, fogFlowX:1.0, fogFlowY:0.0, fogOctaves:3, fogThrottle:true };
   const baseAmp  = { a:[0.46,-0.58], b1:[-0.46,0.35], b2:[0.35,-0.35], c:[-0.35,0.58], d1:[0.23,0.35], d2:[-0.35,-0.23] };
   const wordNames = ['Whisper','in','the','Halls'];
   const wordDisabled = [false,false,false,false];
@@ -1266,16 +1283,21 @@ void main(){
       window.FOG.opacity = C.fogOpacity ?? 0.55;
       window.FOG.height  = C.fogHeight  ?? 0.40;
       window.FOG.speed   = C.fogSpeed   ?? 1.0;
-      window.FOG.color   = C.fogColor  ?? '#1a0f04';
-      window.FOG.scale   = C.fogScale  ?? 3.2;
-      window.FOG.warp    = C.fogWarp   ?? 1.8;
-      window.FOG.flowX   = C.fogFlowX  ?? 1.0;
-      window.FOG.flowY   = C.fogFlowY  ?? 0.0;
+      window.FOG.color   = C.fogColor   ?? '#1a0f04';
+      window.FOG.scale   = C.fogScale   ?? 3.2;
+      window.FOG.warp    = C.fogWarp    ?? 1.8;
+      window.FOG.flowX   = C.fogFlowX   ?? 1.0;
+      window.FOG.flowY   = C.fogFlowY   ?? 0.0;
+      window.FOG.octaves = C.fogOctaves ?? 3;
+      window.FOG.throttle= C.fogThrottle?? true;
     }
-    document.getElementById('fog-scale').value         = C.fogScale  ?? 3.2;
-    document.getElementById('fog-warp').value          = C.fogWarp   ?? 1.8;
-    document.getElementById('fog-flowx').value         = C.fogFlowX  ?? 1.0;
-    document.getElementById('fog-flowy').value         = C.fogFlowY  ?? 0.0;
+    document.getElementById('fog-throttle').checked       = C.fogThrottle ?? true;
+    document.getElementById('fog-oct').value              = C.fogOctaves  ?? 3;
+    document.getElementById('fog-oct-val').textContent    = C.fogOctaves  ?? 3;
+    document.getElementById('fog-scale').value            = C.fogScale    ?? 3.2;
+    document.getElementById('fog-warp').value             = C.fogWarp     ?? 1.8;
+    document.getElementById('fog-flowx').value            = C.fogFlowX    ?? 1.0;
+    document.getElementById('fog-flowy').value            = C.fogFlowY    ?? 0.0;
     document.getElementById('fog-scale-val').textContent  = parseFloat(C.fogScale  ?? 3.2).toFixed(1);
     document.getElementById('fog-warp-val').textContent   = parseFloat(C.fogWarp   ?? 1.8).toFixed(1);
     document.getElementById('fog-flowx-val').textContent  = parseFloat(C.fogFlowX  ?? 1.0).toFixed(1);
@@ -1307,6 +1329,8 @@ void main(){
       fogWarp:      parseFloat(document.getElementById('fog-warp').value),
       fogFlowX:     parseFloat(document.getElementById('fog-flowx').value),
       fogFlowY:     parseFloat(document.getElementById('fog-flowy').value),
+      fogOctaves:   parseFloat(document.getElementById('fog-oct').value),
+      fogThrottle:  document.getElementById('fog-throttle').checked,
     };
   }
 
@@ -1383,6 +1407,11 @@ void main(){
   document.getElementById('fog-speed').addEventListener('input', e => {
     document.getElementById('fog-speed-val').textContent = parseFloat(e.target.value).toFixed(1) + '×';
     window.FOG.speed = parseFloat(e.target.value);
+  });
+  document.getElementById('fog-throttle').addEventListener('change', e => { window.FOG.throttle = e.target.checked; });
+  document.getElementById('fog-oct').addEventListener('input', e => {
+    document.getElementById('fog-oct-val').textContent = e.target.value;
+    window.FOG.octaves = parseFloat(e.target.value);
   });
   document.getElementById('fog-color').addEventListener('input', e => { window.FOG.color = e.target.value; });
   document.getElementById('fog-scale').addEventListener('input', e => {

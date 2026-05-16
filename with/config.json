@@ -25,6 +25,8 @@
   "fogColor": "#ffffff",
   "fogScale": 5,
   "fogWarp": 1.2,
-  "fogFlowX": -2.9,
-  "fogFlowY": -2
+  "fogFlowX": -3,
+  "fogFlowY": -2,
+  "fogOctaves": 4,
+  "fogThrottle": true
 }
