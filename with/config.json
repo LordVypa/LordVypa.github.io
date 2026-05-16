@@ -1,0 +1,10 @@
+{
+  "amp": 2.5,
+  "spd": 0.8,
+  "glow": 0.90,
+  "glowInv": true,
+  "breatheOn": true,
+  "breatheSpeed": 4.0,
+  "breatheDepth": 0.5,
+  "wordDisabled": [false, false, false, false]
+}
