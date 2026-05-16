@@ -13,9 +13,18 @@
     false
   ],
   "dustOn": true,
-  "dustCount": 100,
+  "dustCount": 150,
   "dustSpeed": 1,
   "dustOpacity": 1,
   "dustSize": 1.1,
-  "dustParallax": 1
+  "dustParallax": 1,
+  "fogOn": true,
+  "fogOpacity": 0.35,
+  "fogHeight": 0.4,
+  "fogSpeed": 0.1,
+  "fogColor": "#ffffff",
+  "fogScale": 5,
+  "fogWarp": 1.2,
+  "fogFlowX": -2.9,
+  "fogFlowY": -2
 }
