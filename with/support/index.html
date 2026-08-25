@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Support — Whisper in the Halls</title>
+  <link href="https://fonts.googleapis.com/css2?family=Jolly+Lodger&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold: #D4B483;
+      --amber: #E8A050;
+      --black: #000000;
+      --text: #e0d8c8;
+      --text-dim: #888;
+      --card-border: rgba(212,180,131,0.18);
+    }
+
+    body {
+      background: var(--black);
+      color: var(--text);
+      font-family: 'Crimson Pro', Georgia, serif;
+      font-size: 17px;
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    nav {
+      padding: 28px 60px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      border-bottom: 1px solid rgba(212,180,131,0.08);
+    }
+
+    .nav-back {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(212,180,131,0.45);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--gold); }
+
+    .nav-sep {
+      color: rgba(212,180,131,0.2);
+      font-size: 13px;
+    }
+
+    .nav-logo {
+      font-family: 'Jolly Lodger', cursive;
+      color: var(--gold);
+      font-size: 18px;
+      letter-spacing: 2px;
+      text-decoration: none;
+    }
+
+    /* ── MAIN ── */
+    .wrap {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 80px 40px 120px;
+    }
+
+    .page-tag {
+      display: block;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 14px;
+    }
+
+    .page-title {
+      font-family: 'Jolly Lodger', cursive;
+      color: var(--gold);
+      font-size: clamp(36px, 5vw, 56px);
+      line-height: 1.05;
+      margin-bottom: 16px;
+    }
+
+    .page-sub {
+      color: rgba(224,216,200,0.6);
+      font-size: 15px;
+      max-width: 540px;
+      margin-bottom: 60px;
+    }
+
+    .gold-bar {
+      width: 36px;
+      height: 1px;
+      background: var(--gold);
+      opacity: 0.3;
+      margin: 18px 0 32px;
+    }
+
+    /* ── EMAIL CARD ── */
+    .contact-card {
+      border: 1px solid var(--card-border);
+      padding: 36px 40px;
+      margin-bottom: 64px;
+      display: flex;
+      align-items: flex-start;
+      gap: 28px;
+    }
+
+    .contact-icon {
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+      opacity: 0.5;
+      margin-top: 2px;
+    }
+
+    .contact-body h2 {
+      font-family: 'Jolly Lodger', cursive;
+      color: var(--gold);
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    .contact-body p {
+      font-size: 14px;
+      color: rgba(224,216,200,0.65);
+      line-height: 1.7;
+      margin-bottom: 18px;
+    }
+
+    .contact-email {
+      display: inline-block;
+      font-size: 13px;
+      letter-spacing: 1px;
+      color: var(--gold);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(212,180,131,0.3);
+      padding-bottom: 2px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .contact-email:hover {
+      color: var(--amber);
+      border-color: var(--amber);
+    }
+
+    /* ── FAQ ── */
+    .faq-title {
+      font-family: 'Jolly Lodger', cursive;
+      color: var(--gold);
+      font-size: 28px;
+      margin-bottom: 28px;
+    }
+
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    details {
+      border-top: 1px solid rgba(212,180,131,0.12);
+    }
+    details:last-child {
+      border-bottom: 1px solid rgba(212,180,131,0.12);
+    }
+
+    summary {
+      padding: 20px 4px;
+      font-size: 15px;
+      color: rgba(224,216,200,0.85);
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      user-select: none;
+      transition: color 0.2s;
+    }
+    summary:hover { color: var(--gold); }
+    summary::-webkit-details-marker { display: none; }
+
+    .faq-arrow {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+      opacity: 0.4;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+    details[open] .faq-arrow {
+      transform: rotate(180deg);
+      opacity: 0.7;
+    }
+    details[open] summary { color: var(--gold); }
+
+    .faq-answer {
+      padding: 0 4px 22px;
+      font-size: 14px;
+      color: rgba(224,216,200,0.6);
+      line-height: 1.8;
+    }
+
+    .faq-answer a {
+      color: var(--gold);
+      text-underline-offset: 3px;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 22px;
+      font-size: 11px;
+      color: rgba(255,255,255,0.13);
+      border-top: 1px solid rgba(255,255,255,0.04);
+    }
+
+    @media (max-width: 600px) {
+      nav { padding: 20px 24px; }
+      .wrap { padding: 60px 24px 80px; }
+      .contact-card { flex-direction: column; gap: 16px; padding: 28px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="../" class="nav-back">← Back</a>
+  <span class="nav-sep">/</span>
+  <a href="../" class="nav-logo">Whisper in the Halls</a>
+</nav>
+
+<div class="wrap">
+
+  <span class="page-tag">Support</span>
+  <h1 class="page-title">We're Here to Help</h1>
+  <div class="gold-bar"></div>
+  <p class="page-sub">Having a problem with Whisper in the Halls? Check the FAQ below or reach out directly — we read every message.</p>
+
+  <!-- EMAIL CONTACT -->
+  <div class="contact-card">
+    <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="2" y="4" width="20" height="16" rx="2"/>
+      <path d="M2 7l10 7 10-7"/>
+    </svg>
+    <div class="contact-body">
+      <h2>Email Support</h2>
+      <p>Send us a description of the issue, your system specs, and any steps to reproduce it. We typically respond within 2–3 business days.</p>
+      <a href="mailto:support@freakganginteractive.com" class="contact-email">support@freakganginteractive.com</a>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <h2 class="faq-title">Frequently Asked Questions</h2>
+
+  <div class="faq-list">
+
+    <details>
+      <summary>
+        What platforms will Whisper in the Halls be available on?
+        <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </summary>
+      <p class="faq-answer">The game will launch on PC (Windows) via Steam. Additional platform support has not been announced.</p>
+    </details>
+
+    <details>
+      <summary>
+        When does the game release?
+        <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </summary>
+      <p class="faq-answer">A release date has not been announced yet. Wishlist the game on Steam to be notified the moment it goes live.</p>
+    </details>
+
+    <details>
+      <summary>
+        The game won't launch — what do I do?
+        <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </summary>
+      <p class="faq-answer">Try verifying the game files through Steam (right-click the game → Properties → Local Files → Verify integrity). If the issue persists, email us at <a href="mailto:support@freakganginteractive.com">support@freakganginteractive.com</a> with your system specs and the Steam error message.</p>
+    </details>
+
+    <details>
+      <summary>
+        I'm experiencing crashes or freezes mid-game.
+        <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </summary>
+      <p class="faq-answer">Please email us with your OS version, GPU model, and a description of when the crash occurs. If you have a crash log, attach it — it helps us fix the issue faster for everyone.</p>
+    </details>
+
+    <details>
+      <summary>
+        My save file is missing or corrupted.
+        <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </summary>
+      <p class="faq-answer">We're sorry to hear that. Email us and we'll do our best to help recover your progress. Include your Steam username and approximately how far you were in the game.</p>
+    </details>
+
+    <details>
+      <summary>
+        Does the game contain content warnings?
+        <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </summary>
+      <p class="faq-answer">Whisper in the Halls deals with themes of institutional trauma, child neglect, and psychological horror. Detailed content warnings will be listed on the Steam store page prior to release.</p>
+    </details>
+
+    <details>
+      <summary>
+        I have a question not covered here.
+        <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </summary>
+      <p class="faq-answer">Just email us at <a href="mailto:support@freakganginteractive.com">support@freakganginteractive.com</a> — we're happy to help.</p>
+    </details>
+
+  </div>
+
+</div>
+
+<footer>© 2025 Whisper in the Halls &nbsp;·&nbsp; All rights reserved</footer>
+
+</body>
+</html>
