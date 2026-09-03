@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Support — Whisper in the Halls</title>
+  <title>Get In Touch — Whisper in the Halls</title>
   <link href="https://fonts.googleapis.com/css2?family=Jolly+Lodger&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -29,7 +29,7 @@
       min-height: 100vh;
     }
 
-    /* ── NAV — matches main site exactly ── */
+    /* ── NAV — reads live values from config.json, same as main site ── */
     nav {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -39,9 +39,9 @@
       justify-content: center;
       align-items: center;
       gap: 48px;
-      background: rgba(6,3,1,0.72);
-      backdrop-filter: blur(13px);
-      -webkit-backdrop-filter: blur(13px);
+      background: rgba(6,3,1,var(--nav-bg-op, 0.88));
+      backdrop-filter: blur(var(--nav-blur, 14px));
+      -webkit-backdrop-filter: blur(var(--nav-blur, 14px));
     }
     nav::after {
       content: '';
@@ -51,8 +51,8 @@
       background: linear-gradient(
         90deg,
         transparent 0%,
-        rgba(212,180,131,0.6) 50%,
-        rgba(212,180,131,0.6) 50%,
+        rgba(212,180,131,var(--nav-border-op, 0.14)) var(--nav-border-fade, 20%),
+        rgba(212,180,131,var(--nav-border-op, 0.14)) calc(100% - var(--nav-border-fade, 20%)),
         transparent 100%
       );
       opacity: 0;
@@ -68,15 +68,15 @@
     }
 
     .nav-links a {
-      color: #d8d0c4;
+      color: var(--nav-link-color, rgba(224,216,200,0.6));
       text-decoration: none;
-      font-size: 18px;
+      font-size: var(--fs-nav, 13px);
       letter-spacing: 2px;
       text-transform: uppercase;
       transition: color 0.2s;
     }
 
-    .nav-links a:hover { color: var(--gold); }
+    .nav-links a:hover { color: var(--nav-link-hover, var(--gold)); }
 
     /* ── MAIN ── */
     .wrap {
@@ -122,45 +122,11 @@
       margin-bottom: 64px;
     }
 
-    /* ── EMAIL CARD ── */
-    .contact-card {
-      border: 1px solid var(--card-border);
-      padding: 40px 44px;
-      display: flex;
-      align-items: flex-start;
-      gap: 32px;
-      background: rgba(255,255,255,0.02);
-    }
-
-    .contact-icon {
-      width: 38px;
-      height: 38px;
-      flex-shrink: 0;
-      opacity: 0.45;
-      margin-top: 4px;
-    }
-
-    .contact-body h2 {
-      font-family: 'Jolly Lodger', cursive;
-      font-weight: 700;
-      color: var(--gold);
-      font-size: 21px;
-      margin-bottom: 10px;
-    }
-
-    .contact-body p {
-      font-size: 20px;
-      color: rgba(224,216,200,0.78);
-      line-height: 1.3;
-      margin-bottom: 20px;
-    }
-
     .contact-email {
       display: inline-block;
-      font-size: 14px;
+      font-size: 18px;
       font-weight: 700;
-      letter-spacing: 2.5px;
-      text-transform: uppercase;
+      letter-spacing: 1.5px;
       color: var(--gold);
       text-decoration: none;
       border-bottom: 1px solid rgba(212,180,131,0.3);
@@ -186,7 +152,6 @@
     @media (max-width: 640px) {
       nav { padding: 18px 24px; }
       .wrap { padding: 120px 24px 80px; }
-      .contact-card { flex-direction: column; gap: 18px; padding: 28px 24px; }
     }
   </style>
 </head>
@@ -198,30 +163,18 @@
 <nav>
   <ul class="nav-links">
     <li><a href="../">Home</a></li>
-    <li><a href="../#trailer">Trailer</a></li>
-    <li><a href="../#gallery">Gallery</a></li>
-    <li><a href="../#about">About</a></li>
+    <li><a href="../#about">Glimpse</a></li>
   </ul>
 </nav>
 
 <div class="wrap">
 
-  <span class="page-tag">Need a Hand?</span>
-  <h1 class="page-title">Talk to Us</h1>
+  <span class="page-tag">Say Hello</span>
+  <h1 class="page-title">Get In Touch</h1>
   <div class="gold-bar"></div>
-  <p class="page-sub">Something acting up, or just want to say hi? Drop us a line — a real person reads every email.</p>
+  <p class="page-sub">Questions, bugs, feedback — whatever's on your mind, we read everything.</p>
 
-  <div class="contact-card">
-    <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-      <rect x="2" y="4" width="20" height="16" rx="2"/>
-      <path d="M2 7l10 7 10-7"/>
-    </svg>
-    <div class="contact-body">
-      <h2>Shoot Us an Email</h2>
-      <p>Tell us what happened, your system specs, and how to reproduce it if it's a bug. We'll get back to you in a couple of days.</p>
-      <a href="mailto:support@freakganginteractive.com" class="contact-email">support@freakganginteractive.com</a>
-    </div>
-  </div>
+  <a href="mailto:hello@freakganginteractive.com" class="contact-email">hello@freakganginteractive.com</a>
 
 </div>
 
@@ -234,6 +187,27 @@
   window.addEventListener('scroll', () => {
     nav.classList.toggle('scrolled', window.scrollY > 10);
   });
+})();
+</script>
+
+<script>
+/* ── NAV CONFIG SYNC — reads the same config.json the main site's dev panel writes to,
+   so this page's nav always matches the main site without manual re-tuning ── */
+(function(){
+  fetch('../config.json?t=' + Date.now(), {cache: 'no-store'})
+    .then(r => r.ok ? r.json() : null)
+    .then(C => {
+      if(!C) return;
+      const r = document.documentElement;
+      if(C.navBgOp     != null) r.style.setProperty('--nav-bg-op', C.navBgOp);
+      if(C.navBlur     != null) r.style.setProperty('--nav-blur', C.navBlur + 'px');
+      if(C.navBorderOp != null) r.style.setProperty('--nav-border-op', C.navBorderOp);
+      if(C.navBorderFade != null) r.style.setProperty('--nav-border-fade', C.navBorderFade + '%');
+      if(C.navLinkColor != null) r.style.setProperty('--nav-link-color', C.navLinkColor);
+      if(C.navLinkHover != null) r.style.setProperty('--nav-link-hover', C.navLinkHover);
+      if(C.fsNav != null) r.style.setProperty('--fs-nav', C.fsNav + 'px');
+    })
+    .catch(() => {}); // fine to silently fall back to CSS defaults
 })();
 </script>
 
